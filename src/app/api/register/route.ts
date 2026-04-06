@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         "참가 동기": {
           rich_text: [{ text: { content: motivation || "" } }],
         },
-        신청일시: {
+        "신청 일시": {
           rich_text: [{ text: { content: new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) } }],
         },
       },
