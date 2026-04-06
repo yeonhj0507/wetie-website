@@ -100,11 +100,18 @@ export default function Register() {
             </div>
             <div>
               <label className="block text-xs text-white/30 mb-2">학년 <span className="text-[#D63050]">*</span></label>
-              <select value={form.grade} onChange={(e) => set("grade", e.target.value)}
-                className={inputCls("grade") + " cursor-pointer"}>
-                <option value="" disabled>선택</option>
-                {["1학년", "2학년", "3학년"].map((g) => <option key={g}>{g}</option>)}
-              </select>
+              <div className="grid grid-cols-3 gap-2">
+                {["1학년", "2학년", "3학년"].map((g) => (
+                  <button key={g} type="button" onClick={() => set("grade", g)}
+                    className={`py-3.5 rounded-xl text-sm font-bold border transition-all cursor-pointer ${
+                      form.grade === g
+                        ? "bg-[#8B1A2A]/50 border-[#D63050]/60 text-white"
+                        : "bg-white/3 border-white/8 text-white/40 hover:border-white/20 hover:text-white/70"
+                    }`}>
+                    {g}
+                  </button>
+                ))}
+              </div>
               {errors.grade && <p className="text-[#D63050] text-xs mt-1">{errors.grade}</p>}
             </div>
           </div>
