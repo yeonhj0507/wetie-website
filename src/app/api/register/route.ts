@@ -34,19 +34,19 @@ export async function POST(req: NextRequest) {
           rich_text: [{ text: { content: school } }],
         },
         학년: {
-          rich_text: [{ text: { content: grade } }],
+          select: { name: grade },
         },
         연락처: {
-          rich_text: [{ text: { content: phone } }],
+          phone_number: phone,
         },
         이메일: {
-          rich_text: [{ text: { content: email } }],
+          email: email,
         },
         "참가 동기": {
           rich_text: [{ text: { content: motivation || "" } }],
         },
         "신청 일시": {
-          rich_text: [{ text: { content: new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) } }],
+          date: { start: new Date().toISOString() },
         },
       },
     });
