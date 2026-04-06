@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Client } from "@notionhq/client";
+import { sendConfirmEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
-  // 환경변수 확인
   if (!process.env.NOTION_TOKEN || !process.env.NOTION_DB_ID) {
-    console.error("Missing env vars:", {
-      token: !!process.env.NOTION_TOKEN,
-      db: !!process.env.NOTION_DB_ID,
-    });
     return NextResponse.json({ error: "서버 설정 오류입니다." }, { status: 500 });
   }
 
@@ -23,38 +19,31 @@ export async function POST(req: NextRequest) {
 
     const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
+    // Notion에 저장
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DB_ID },
       properties: {
-        // Title 컬럼 — Notion DB의 첫 번째 컬럼(Title 타입)
-        이름: {
-          title: [{ text: { content: name } }],
-        },
-        학교: {
-          rich_text: [{ text: { content: school } }],
-        },
-        학년: {
-          select: { name: grade },
-        },
-        연락처: {
-          phone_number: phone,
-        },
-        이메일: {
-          email: email,
-        },
-        "참가 동기": {
-          rich_text: [{ text: { content: motivation || "" } }],
-        },
-        "신청 일시": {
-          date: { start: new Date().toISOString() },
-        },
+        이름: { title: [{ text: { content: name } }] },
+        학교: { rich_text: [{ text: { content: school } }] },
+        학년: { select: { name: grade } },
+        연락처: { phone_number: phone },
+        이메일: { email: email },
+        "참가 동기": { rich_text: [{ text: { content: motivation || "" } }] },
+        "신청 일시": { date: { start: new Date().toISOString() } },
       },
     });
+
+    // 확인 이메일 발송 (실패해도 신청은 성공 처리)
+    if (process.env.RESEND_API_KEY) {
+      await sendConfirmEmail({ name, email, school, grade }).catch((err) =>
+        console.error("Email send failed:", err)
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("Notion API error:", message);
+    console.error("Register error:", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

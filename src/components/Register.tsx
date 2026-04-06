@@ -79,9 +79,15 @@ export default function Register() {
         <h2 className="reveal text-3xl md:text-4xl font-black text-white tracking-tight mb-3">
           참가 신청
         </h2>
-        <p className="reveal reveal-delay-1 text-white/35 text-sm mb-12">
+        <p className="reveal reveal-delay-1 text-white/35 text-sm mb-5">
           성북구·동대문구·강북구 인근 고등학교 재학생이라면 누구나 신청 가능합니다. 참가비 무료.
         </p>
+        <div className="reveal reveal-delay-2 flex items-center gap-2.5 px-4 py-3 rounded-xl border border-[#D63050]/25 bg-[#D63050]/8 mb-10">
+          <span className="text-[#D63050] text-base">⚠</span>
+          <p className="text-[#D63050]/80 text-sm">
+            선착순 <strong className="text-[#D63050]">50명</strong> 정원으로 조기 마감될 수 있습니다.
+          </p>
+        </div>
 
         <form onSubmit={submit} noValidate className="reveal reveal-delay-2 flex flex-col gap-4">
           {/* 이름 + 학년 */}
