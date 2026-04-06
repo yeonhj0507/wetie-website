@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Client } from "@notionhq/client";
+
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const DB_ID = process.env.NOTION_DB_ID!;
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { name, school, grade, phone, email, motivation, source, agree } = body;
+    const { name, school, grade, phone, email, motivation, agree } = await req.json();
 
-    // Basic validation
     if (!name || !school || !grade || !phone || !email || !agree) {
       return NextResponse.json({ error: "필수 항목이 누락되었습니다." }, { status: 400 });
     }
@@ -13,13 +15,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "올바른 이메일 형식이 아닙니다." }, { status: 400 });
     }
 
-    // TODO: Google Sheets API 또는 DB 연동 시 여기에 추가
-    // 예시: await appendToSheet({ name, school, grade, phone, email, motivation, source });
+    await notion.pages.create({
+      parent: { database_id: DB_ID },
+      properties: {
+        이름: { title: [{ text: { content: name } }] },
+        학교: { rich_text: [{ text: { content: school } }] },
+        학년: { select: { name: grade } },
+        연락처: { phone_number: phone },
+        이메일: { email: email },
+        참가동기: { rich_text: [{ text: { content: motivation || "" } }] },
+        신청일시: { date: { start: new Date().toISOString() } },
+      },
+    });
 
-    console.log("New registration:", { name, school, grade, phone, email, motivation, source });
-
-    return NextResponse.json({ success: true, message: "신청이 완료되었습니다." });
-  } catch {
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "서버 오류가 발생했습니다." }, { status: 500 });
   }
 }
