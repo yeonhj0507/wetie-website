@@ -14,12 +14,12 @@ export default function Footer() {
 
         <div className="text-xs text-white/20 space-y-1">
           <div>2026년 5월 10일 (일) 13:00–18:00 · 고려대학교</div>
-          <div>문의: wetie@korea.ac.kr</div>
+          <div>문의: wetie.ku@gmail.com</div>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto mt-8 pt-6 border-t border-white/4 text-xs text-white/15">
-        © 2026 WeTIE — 고려대학교 산업경영공학부 학생 단체
+        © 2026 WeTIE — 고려대학교 산업경영공학부 학술동아리
       </div>
     </footer>
   );
