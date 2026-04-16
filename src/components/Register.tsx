@@ -5,10 +5,10 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 type Form = {
   name: string; school: string; grade: string;
-  phone: string; email: string; motivation: string; agree: boolean;
+  phone: string; email: string; motivation: string; question: string; agree: boolean;
 };
 
-const empty: Form = { name: "", school: "", grade: "", phone: "", email: "", motivation: "", agree: false };
+const empty: Form = { name: "", school: "", grade: "", phone: "", email: "", motivation: "", question: "", agree: false };
 
 export default function Register() {
   const [form, setForm] = useState<Form>(empty);
@@ -146,6 +146,14 @@ export default function Register() {
             <textarea rows={3} placeholder="산업경영공학에 관심을 갖게 된 계기나 참가 이유를 자유롭게 작성해 주세요."
               value={form.motivation} onChange={(e) => set("motivation", e.target.value)}
               className={inputCls("motivation") + " resize-none"} />
+          </div>
+
+          {/* 사전 질문 */}
+          <div>
+            <label className="block text-xs text-white/30 mb-2">사전 질문 <span className="text-white/15">(선택)</span></label>
+            <textarea rows={3} placeholder="멘토나 교수님께 미리 여쭤보고 싶은 질문이 있으면 적어주세요."
+              value={form.question} onChange={(e) => set("question", e.target.value)}
+              className={inputCls("question") + " resize-none"} />
           </div>
 
           {/* 개인정보 동의 */}

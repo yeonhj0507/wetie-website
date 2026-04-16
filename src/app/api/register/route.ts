@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { name, school, grade, phone, email, motivation, agree } = await req.json();
+    const { name, school, grade, phone, email, motivation, question, agree } = await req.json();
 
     if (!name || !school || !grade || !phone || !email || !agree) {
       return NextResponse.json({ error: "필수 항목이 누락되었습니다." }, { status: 400 });
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
         연락처: { phone_number: phone },
         이메일: { email: email },
         "참가 동기": { rich_text: [{ text: { content: motivation || "" } }] },
+        "사전 질문": { rich_text: [{ text: { content: question || "" } }] },
         "신청 일시": { date: { start: new Date().toISOString() } },
       },
     });
